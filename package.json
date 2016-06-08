@@ -1,0 +1,23 @@
+{
+  "name": "reco9",
+  "version": "0.0.1",
+  "description": "recommendation engine",
+  "main": ".reco9.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github/pelling/reco9"
+  },
+  "keywords": [
+    "recommendation",
+    "engine"
+  ],
+  "author": "Christopher Pelling <cppelling@gmail.com> (http://www.cppelling.com)",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3"
+  }
+}
