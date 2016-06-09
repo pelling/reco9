@@ -1,6 +1,6 @@
 {
   "name": "reco9",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "recommendation engine",
   "main": ".reco9.js",
   "scripts": {
