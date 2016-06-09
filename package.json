@@ -1,8 +1,8 @@
 {
   "name": "reco9",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "recommendation engine",
-  "main": ".reco9.js",
+  "main": "reco9.js",
   "scripts": {
     "test": "node_modules/.bin/mocha --reporter spec",
     "cover": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*"
