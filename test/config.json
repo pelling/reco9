@@ -1,0 +1,16 @@
+{
+  "reco9": {
+    "neo4j": {
+      "connectionUri": "asdf",
+      "restUrl": "asdf",
+      "restUsername": "asdf",
+      "restPassword": "asdf"
+    },
+    "options": {
+
+    }
+
+  }
+
+
+}

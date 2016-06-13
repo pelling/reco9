@@ -7,7 +7,7 @@ describe('#reco9 tests', function() {
 
 
   it('check that loading config file works', function() {
-      reco9.loadConfigFile("./config.json");
+      reco9.loadConfigFile("./test/config.json");
       expect(reco9.neo4j.connectionUri).to.equal('asdf');
   });
 
