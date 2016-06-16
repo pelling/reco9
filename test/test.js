@@ -1,8 +1,5 @@
 'use strict';
 
-
-
-var neo4j = require('neo4j-driver').v1;
 var reco9 = require('../reco9');
 
 var chai = require('chai');
