@@ -1,10 +1,7 @@
 {
   "reco9": {
     "neo4j": {
-      "connectionUri": "asdf",
-      "restUrl": "asdf",
-      "restUsername": "asdf",
-      "restPassword": "asdf"
+      "connectionUri": "http://reco9:qR3kitIKKkYTUHGRcT3D@reco9.sb10.stations.graphenedb.com:24789"
     },
     "options": {
 
