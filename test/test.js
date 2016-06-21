@@ -1,7 +1,7 @@
 'use strict';
 
 var reco9 = require('../reco9');
-
+var Promise = require('promise');
 var chai = require('chai');
 var should = chai.should();
 var expect = chai.expect;
@@ -17,22 +17,20 @@ describe('#reco9 tests', function() {
       expect(reco9.neo4jConfig.connectionUri).to.equal('http://reco9:qR3kitIKKkYTUHGRcT3D@reco9.sb10.stations.graphenedb.com:24789');
   });
 
-  it('check that loading db works', function() {
-      reco9.loadConfigFile("./test/config.json");
-      reco9.loadDb(function(){
-        expect(typeof reco9.db).to.equal('object');
-      });
 
+
+  it('check that creating person node works', function(done) {
+      reco9.loadConfigFile("./test/config.json");
+      reco9.createPerson("Chris Pelling", "asdfasdf", function(body){
+        expect(Promise.resolve(body.data[0][0].data.id)).to.eventually.equal('asdfasdf').notify(done);
+      });
   });
 
-  it('check that creating node works', function(done) {
+  it('check that creating item node works', function(done) {
       reco9.loadConfigFile("./test/config.json");
-      reco9.loadDb(function(){
-        reco9.createNode(function(nodeId){
-          expect(Promise.resolve(typeof nodeId)).to.eventually.equal('number').notify(done);
-        });
+      reco9.createItem("ProductA", "bbbnnn", function(body){
+        expect(Promise.resolve(body.data[0][0].data.id)).to.eventually.equal('bbbnnn').notify(done);
       });
-
   });
 
 

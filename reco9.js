@@ -1,5 +1,5 @@
 'use strict';
-var neo4j = require('neo4j');
+var request = require('request');
 
 /**
  * Recommendation engine built on top of neo4j
@@ -19,21 +19,36 @@ reco9.loadConfigJson = function(reco9config) {
   if (typeof reco9.neo4jConfig.connectionUri !== 'string') throw 'connectionUri is not a valid string';
 }
 
-reco9.loadDb = function(callback) {
-  var neo4j = require("neo4j");
-  reco9.db = new neo4j.GraphDatabase(reco9.neo4jConfig.connectionUri);
-  callback();
+
+reco9.createPerson = function(name, id, callback) {
+  var query = 'CREATE (p:Person {name:"' + name + '", id:"' + id + '"}) RETURN p';
+  reco9.runCypher(query, {}, callback);
+
 }
 
-reco9.createNode = function(callback) {
-  var node = reco9.db.createNode({mr: 'pie'});     // instantaneous, but...
-  node.save(function (err, node) {    // ...this is what actually persists.
-      if (err) {
-          callback(err);
-      } else {
-          callback(node.id);
+
+reco9.createItem = function(name, id, callback) {
+  var query = 'CREATE (i:Item {name:"' + name + '", id:"' + id + '"}) RETURN i';
+  reco9.runCypher(query, {}, callback);
+
+}
+
+
+reco9.runCypher = function(query, params, callback) {
+
+    request({
+      uri: reco9.neo4jConfig.connectionUri + '/db/data/cypher',
+      method: "POST",
+      Accept: "application/json; charset=UTF-8",
+      "Content-Type": "application/json",
+      form: {
+        query: query,
+        params: params
       }
-  });
+    }, function(error, response, body) {
+      callback(JSON.parse(body));
+    });
+
 }
 
 
