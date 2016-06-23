@@ -7,37 +7,47 @@ var request = require('request');
 
 var reco9 = {};
 
-reco9.loadConfigFile = function(path) {
-  var config = require(path);
-  var reco9config = config.reco9;
-  reco9.loadConfigJson(reco9config);
+
+reco9.loadConnectionUri = function(connectionUri) {
+  reco9.connectionUri = connectionUri;
+  if (typeof reco9.connectionUri !== 'string') throw 'connectionUri is not a valid string';
 }
 
-reco9.loadConfigJson = function(reco9config) {
-  reco9.neo4jConfig = reco9config.neo4j;
-
-  if (typeof reco9.neo4jConfig.connectionUri !== 'string') throw 'connectionUri is not a valid string';
+reco9.createPersonIdConstraint = function(callback) {
+  var query = 'CREATE CONSTRAINT ON (p:Person) ASSERT p.id IS UNIQUE';
+  reco9.runCypher(query, {}, callback);
 }
 
+reco9.createItemIdConstraint = function(callback) {
+  var query = 'CREATE CONSTRAINT ON (i:Item) ASSERT i.id IS UNIQUE';
+  reco9.runCypher(query, {}, callback);
+}
 
 reco9.createPerson = function(name, id, callback) {
-  var query = 'CREATE (p:Person {name:"' + name + '", id:"' + id + '"}) RETURN p';
+  var query = 'MERGE (p:Person {name:"' + name + '", id:"' + id + '"}) RETURN p';
   reco9.runCypher(query, {}, callback);
-
 }
 
+reco9.deletePerson = function(id, callback) {
+  var query = 'MATCH (p:Person { id:"' + id + '"}) DETACH DELETE p';
+  reco9.runCypher(query, {}, callback);
+}
 
 reco9.createItem = function(name, id, callback) {
-  var query = 'CREATE (i:Item {name:"' + name + '", id:"' + id + '"}) RETURN i';
+  var query = 'MERGE (i:Item {name:"' + name + '", id:"' + id + '"}) RETURN i';
   reco9.runCypher(query, {}, callback);
-
 }
 
+
+reco9.deleteItem = function(id, callback) {
+  var query = 'MATCH (i:Item { id:"' + id + '"}) DETACH DELETE i';
+  reco9.runCypher(query, {}, callback);
+}
 
 reco9.runCypher = function(query, params, callback) {
 
     request({
-      uri: reco9.neo4jConfig.connectionUri + '/db/data/cypher',
+      uri: reco9.connectionUri + '/db/data/cypher',
       method: "POST",
       Accept: "application/json; charset=UTF-8",
       "Content-Type": "application/json",
@@ -46,7 +56,7 @@ reco9.runCypher = function(query, params, callback) {
         params: params
       }
     }, function(error, response, body) {
-      callback(JSON.parse(body));
+        callback(error, JSON.parse(body));
     });
 
 }

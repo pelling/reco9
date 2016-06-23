@@ -6,30 +6,73 @@ var chai = require('chai');
 var should = chai.should();
 var expect = chai.expect;
 var chaiAsPromised = require('chai-as-promised');
+var connectionUri = 'http://reco9:qR3kitIKKkYTUHGRcT3D@reco9.sb10.stations.graphenedb.com:24789';
 chai.use(chaiAsPromised);
 
 
 describe('#reco9 tests', function() {
 
 
-  it('check that loading config file works', function() {
-      reco9.loadConfigFile("./test/config.json");
-      expect(reco9.neo4jConfig.connectionUri).to.equal('http://reco9:qR3kitIKKkYTUHGRcT3D@reco9.sb10.stations.graphenedb.com:24789');
+
+  it('check that loading connectionUri loads correctly', function() {
+      reco9.loadConnectionUri(connectionUri);
+      expect(reco9.connectionUri).to.equal(connectionUri);
   });
 
 
+  it('check that creating db contraint on Person Id works', function(done) {
+      this.timeout(10000);
+      reco9.loadConnectionUri(connectionUri);
+      reco9.createPersonIdConstraint(function(error, body){
+        expect(Promise.resolve(error)).to.eventually.equal(null);
+        expect(Promise.resolve(Object.keys(body))).to.deep.eventually.equal(['columns','data']).notify(done);
+      });
+  });
+
+  it('check that creating db contraint on Item Id works', function(done) {
+      this.timeout(10000);
+      reco9.loadConnectionUri(connectionUri);
+      reco9.createItemIdConstraint(function(error, body){
+        expect(Promise.resolve(error)).to.eventually.equal(null);
+        expect(Promise.resolve(Object.keys(body))).to.deep.eventually.equal(['columns','data']).notify(done);
+      });
+  });
+
 
   it('check that creating person node works', function(done) {
-      reco9.loadConfigFile("./test/config.json");
-      reco9.createPerson("Chris Pelling", "asdfasdf", function(body){
-        expect(Promise.resolve(body.data[0][0].data.id)).to.eventually.equal('asdfasdf').notify(done);
+      this.timeout(10000);
+      reco9.loadConnectionUri(connectionUri);
+      reco9.createPerson("Bob Calhoun", "bobby", function(error, body){
+        expect(Promise.resolve(error)).to.eventually.equal(null);
+        expect(Promise.resolve(body.data[0][0].data.id)).to.eventually.equal('bobby').notify(done);
+      });
+  });
+
+
+  it('check that deleting person node works', function(done) {
+      this.timeout(10000);
+      reco9.loadConnectionUri(connectionUri);
+      reco9.deletePerson("bobby", function(error, body){
+        expect(Promise.resolve(error)).to.eventually.equal(null);
+        expect(Promise.resolve(Object.keys(body))).to.deep.eventually.equal(['columns','data']).notify(done);
       });
   });
 
   it('check that creating item node works', function(done) {
-      reco9.loadConfigFile("./test/config.json");
-      reco9.createItem("ProductA", "bbbnnn", function(body){
-        expect(Promise.resolve(body.data[0][0].data.id)).to.eventually.equal('bbbnnn').notify(done);
+      this.timeout(10000);
+      reco9.loadConnectionUri(connectionUri);
+      reco9.createItem("iPad", "ipad", function(error, body){
+        expect(Promise.resolve(error)).to.eventually.equal(null);
+        expect(Promise.resolve(body.data[0][0].data.id)).to.eventually.equal('ipad').notify(done);
+      });
+  });
+
+  it('check that deleting item node works', function(done) {
+      this.timeout(10000);
+      reco9.loadConnectionUri(connectionUri);
+      reco9.deleteItem("ipad", function(error, body){
+        expect(Promise.resolve(error)).to.eventually.equal(null);
+        expect(Promise.resolve(Object.keys(body))).to.deep.eventually.equal(['columns','data']).notify(done);
       });
   });
 
